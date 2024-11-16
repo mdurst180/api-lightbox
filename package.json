@@ -1,0 +1,15 @@
+{
+  "name": "api-lightbox",
+  "version": "1.0.0",
+  "description": "Lightbox API users",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
