@@ -11,7 +11,7 @@ services:
       - DATABASE_URL=postgresql://postgres:password@db:5432/mydatabase
     depends_on:
       - db
-    command: npm run start
+    command: bash -c "npx drizzle-kit migrate --config src/drizzle.config.ts && npm run start"
 
   db:
     image: postgres:15

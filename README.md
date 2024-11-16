@@ -34,3 +34,7 @@ Run the following command to set the DATABASE_URL environment variable in your a
 
 fly secrets set DATABASE_URL=postgres://username:password@hostname:port/database_name
 Replace postgres://username:password@hostname:port/database_name with the actual connection string you received from the fly postgres create command.
+
+fly deploy
+
+ docker-compose up --build
