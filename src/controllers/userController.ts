@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { usersTable } from "../db/schema";
+import { usersTable } from "../schemas/schema";
 import { Request, Response } from "express";
 
 
