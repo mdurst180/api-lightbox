@@ -40,6 +40,11 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
+# Copy the start script into the container
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+# CMD [ "npm", "run", "start" ]
+CMD ["/app/start.sh"]
