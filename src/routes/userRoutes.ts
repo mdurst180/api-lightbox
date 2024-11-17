@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import { createUser, getUsers } from '../controllers/userController';
+import { createUser, getUser, getUsers } from '../controllers/userController';
 import { validate } from '../middleware/validation';
-import { validateCreateUser } from '../validators/usersValidation';
+import { validateCreateUser, validateGetUser } from '../validators/usersValidation';
 
 const router = Router();
 
 router.get('/', getUsers);
+
+router.get('/:userId', getUser);
+
 router.post('/', validate(validateCreateUser), createUser);
 
 // Add other routes like GET /users/:id, PUT /users/:id, DELETE /users/:id

@@ -1,5 +1,5 @@
 // Mock the db module
-jest.mock('../db', () => {
+jest.mock('../../db', () => {
   const { drizzle } = require('drizzle-orm/pglite');
   const { PGlite } = require('@electric-sql/pglite');
 
@@ -9,9 +9,9 @@ jest.mock('../db', () => {
 });
 
 import request from 'supertest';
-import app from '../app';  // Import the Express app
+import app from '../../app';  // Import the Express app
 import { migrate } from 'drizzle-orm/pglite/migrator';
-import { db } from '../db';
+import { db } from '../../db';
 
 // Setup schema before tests
 beforeAll(async () => {
@@ -27,14 +27,23 @@ describe('User Controller', () => {
     });
   });
 
+  describe('GET /users/:userId', () => {
+    it('should return a user based on an Id', async () => {
+      const newUser = { name: 'John Doe', email: 'new@user.com' };
+      const userResponse = await request(app).post('/api/users').send(newUser);
+      const existingUserResponse = await request(app).get(`/api/users/${userResponse.body.id}`);
+      expect(existingUserResponse.status).toBe(200);
+      expect(existingUserResponse.body).toMatchObject(newUser);
+    });
+  });
+
   describe('POST /users', () => {
     it('should create a new user and return it', async () => {
       const newUser = { name: 'John Doe', email: 'john@example.com' };
-
       const response = await request(app).post('/api/users').send(newUser);
 
       expect(response.status).toBe(201);
-      expect(response.body.message).toBe('User added successfully');
+      expect(response.body).toMatchObject(newUser);
     });
 
     it('should return list of users with the new user added', async () => {
@@ -48,7 +57,7 @@ describe('User Controller', () => {
       const invalidUser = { email: 'john@example.com' };
 
       const response = await request(app).post('/api/users').send(invalidUser);
-
+      
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('validation_error');
     });

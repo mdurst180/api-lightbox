@@ -6,3 +6,6 @@ export const validateCreateUser = Joi.object({
   email: Joi.string().email().required(),
 });
 
+export const validateGetUser = Joi.object().keys({
+  userId: Joi.string().required(),
+});

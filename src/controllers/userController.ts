@@ -1,50 +1,45 @@
-import { db } from "../db";
-import { usersTable } from "../schemas/schema";
+// src/controllers/UserController.ts
 import { Request, Response } from "express";
-import logger from '../logger';
+import { User } from "../models/User";
+import logger from "../logger";
 
-// Get all users
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    logger.info('Fetching all users');
-    const users = await db.select().from(usersTable).execute();
+    const users = await User.getAll();
     return res.status(200).json(users);
   } catch (error) {
-    logger.error(`Error fetching users.`, error);
-    return res
-      .status(500)
-      .json({ error: "server_error", message: "Internal Server Error" });
+    logger.error("Error fetching users.", error);
+    return res.status(500).json({ error: "server_error", message: "Error fetching users" });
   }
-}
+};
 
-export const createUser = async (req: Request, res: Response) => {
-  console.log("Creating user");
-  const { name, email }: { name: string; email: string } = req.body;
-
-  // basic validation
-  if (!name || typeof name !== "string" || name.trim().length === 0) {
-    return res
-      .status(400)
-      .json({ error: "validation_error", message: "Name is required" });
-  }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || typeof email !== "string" || !emailRegex.test(email.trim())) {
-    return res.status(400).json({
-      error: "validation_error",
-      message: "Email is missing or invalid",
-    });
-  }
+export const getUser = async (req: Request, res: Response) => {
+  const userId = Number(req.params.userId);
 
   try {
-    await db.insert(usersTable).values({ name: name.trim(), email: email.trim() });
-
-    return res.status(201).json({
-      message: "User added successfully",
-    });
+    logger.debug(`Fetching user with ID: ${userId}`);
+    const user = await User.getById(userId);
+    return res.status(200).json(user);
   } catch (error) {
-    console.log("Error while creating user", error);
-    return res
-      .status(500)
-      .json({ error: "server_error", message: "Unable to add" });
+    if (error.message === "User not found") {
+      return res.status(404).json({ error: "not_found", message: "User not found" });
+    }
+    logger.error(`Error fetching user with ID: ${userId}`, error);
+    return res.status(500).json({ error: "server_error", message: "Error fetching user" });
+  }
+};
+
+export const createUser = async (req: Request, res: Response) => {
+  const { name, email }: { name: string; email: string } = req.body;
+
+  try {
+    logger.info(`Creating user with request ${JSON.stringify(req.body)}`);
+    const user = new User(name.trim(), email.trim());
+    await user.save(); // Save the new user to the database
+    logger.info(`Created user ${JSON.stringify(user)} from request ${JSON.stringify(req.body)}`);
+    return res.status(201).json(user);
+  } catch (error) {
+    logger.error(`Error while creating user with request: ${JSON.stringify(req.body)}`, error);
+    return res.status(500).json({ error: "server_error", message: "Unable to add user" });
   }
 };
