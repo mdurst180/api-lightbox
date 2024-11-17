@@ -92,5 +92,56 @@ router.post('/', validate(validateCreateUser), createUser);
  *                 message:
  *                   type: string
  *                   example: Unable to add
+ * /users/{userId}:
+ *   get:
+ *     summary: Retrieve a single user by userId
+ *     description: Get a user by their unique userId.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The ID of the user to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A single user object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       404:
+ *         description: User not found. The userId provided does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: not_found
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal server error. Unable to retrieve the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: server_error
+ *                 message:
+ *                   type: string
+ *                   example: Error fetching user
  */
 export default router;
