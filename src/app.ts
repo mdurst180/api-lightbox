@@ -22,7 +22,4 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, Express with TypeScript!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-});
+export default app;

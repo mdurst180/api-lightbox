@@ -1,6 +1,11 @@
 # api-ightbox
 Lightbox API users
 
+express
+swagger
+drizzle
+postgres
+docker
 
 fly.io
 Step 1: Install the Fly.io CLI
