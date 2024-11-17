@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { createUser, getUsers } from '../controllers/userController';
+import { validate } from '../middleware/validation';
+import { validateCreateUser } from '../validators/usersValidation';
 
 const router = Router();
 
 router.get('/', getUsers);
-router.post('/', createUser);
+router.post('/', validate(validateCreateUser), createUser);
 
 // Add other routes like GET /users/:id, PUT /users/:id, DELETE /users/:id
 /**
