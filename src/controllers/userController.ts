@@ -2,13 +2,10 @@ import { db } from "../db";
 import { usersTable } from "../schemas/schema";
 import { Request, Response } from "express";
 
-
-
 // Get all users
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await db.select().from(usersTable).execute();
-    // res.json(users);
     return res.status(200).json(users);
   } catch (error) {
     console.error('Error fetching users:', error);
