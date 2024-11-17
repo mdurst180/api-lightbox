@@ -3,7 +3,6 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import routes from './routes/index';
 import swaggerOptions from './swaggerConfig';
-import { users } from './db/schema';
 
 
 const app: Application = express();

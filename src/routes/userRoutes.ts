@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { createUser, getUsers } from '../controllers/userController';
 
 const router = Router();
 
@@ -25,13 +26,8 @@ const router = Router();
  *                   email:
  *                     type: string
  */
-router.get('/', (req, res) => {
-  res.send('Get all users');
-});
-
-router.post('/', (req, res) => {
-  res.send('Create a new user');
-});
+router.post('/', createUser);
+router.get('/', getUsers);
 
 // Add other routes like GET /users/:id, PUT /users/:id, DELETE /users/:id
 
