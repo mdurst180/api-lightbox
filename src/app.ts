@@ -3,10 +3,18 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import routes from './routes/index';
 import swaggerOptions from './swaggerConfig';
-
+import morgan from 'morgan';
+import logger from './logger';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
+
+// Setup Morgan to use Winston for logging
+app.use(morgan('combined', {
+  stream: {
+    write: (message) => logger.info(message.trim()),
+  },
+}));
 
 app.use(express.json());
 
