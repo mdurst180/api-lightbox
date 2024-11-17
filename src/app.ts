@@ -5,6 +5,7 @@ import routes from './routes/index';
 import swaggerOptions from './swaggerConfig';
 import morgan from 'morgan';
 import logger from './logger';
+import { errorHandler } from './middleware/errorHandler';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 app.use('/api', routes); // Register the routes under the /api path
+
+app.use(errorHandler);
 
 // Sample route for testing
 app.get('/', (req: Request, res: Response) => {
