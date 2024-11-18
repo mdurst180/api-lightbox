@@ -15,6 +15,13 @@
       "when": 1731857199530,
       "tag": "0001_hesitant_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731940741686,
+      "tag": "0002_messy_mephisto",
+      "breakpoints": true
     }
   ]
 }

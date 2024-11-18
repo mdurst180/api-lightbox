@@ -18,7 +18,7 @@ afterAll(async () => {
   await client.close()
 });
 
-describe('User Controller', () => {
+describe('Users Controller', () => {
   describe('GET /users', () => {
     it('should return a list of users', async () => {
       const response = await request(app).get('/api/users');
@@ -75,7 +75,7 @@ describe('User Controller', () => {
         .put(`/api/users/${userResponse.body.id}`)
         .send(updatedUser);
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(200);
       expect(response.body).toMatchObject(updatedUser);
     });
 

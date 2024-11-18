@@ -19,7 +19,7 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   const { name, email }: { name: string; email: string } = req.body;
   const id = parseInt(req.params.userId);
-  res.status(201).json(await User.update({ id, name: name.trim(), email: email.trim() }));
+  res.status(200).json(await User.update({ id, name: name.trim(), email: email.trim() }));
 });
 
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
