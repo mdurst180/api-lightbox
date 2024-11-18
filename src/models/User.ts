@@ -1,22 +1,11 @@
-// src/models/User.ts
 import { db } from "../db";
 import logger from "../logger";
-import { NotFoundError } from "../middleware/errorNotFound";
+import { NotFoundError } from "../middleware/notFoundError";
 import { usersTable } from "../schemas/schema";
 import { eq } from "drizzle-orm";
 
 
 export class User {
-  id: number | null;
-  name: string;
-  email: string;
-
-  constructor(name: string, email: string, id: number | null = null) {
-    this.name = name;
-    this.email = email;
-    this.id = id;
-  }
-
   static async getAll() {
     const users = await db.select().from(usersTable).execute();
     return users;
@@ -31,29 +20,21 @@ export class User {
     return user[0];
   }
 
-  async save() {
-    if (this.id) {
-      logger.info(`Updating userId: ${this.id}`);
-      const user = await db.select().from(usersTable).where(eq(usersTable.id, this.id)).execute();
-      if (!user.length) {
-        logger.error(`No user found for userId ${this.id}`);
-        throw new NotFoundError("User not found");
-      }
-      const updatedUser = await db
-        .update(usersTable)
-        .set({ name: this.name, email: this.email })
-        .where(eq(usersTable.id, this.id))
-        .returning();
-      return updatedUser[0];
-    } else {
-      logger.info(`Creating new user`);
-      const newUser = await db
-        .insert(usersTable)
-        .values({ name: this.name, email: this.email })
-        .returning();
-      this.id = newUser[0].id;
-      return newUser[0];
+  static async create({ name, email }: { name: string; email: string; }) {
+    logger.info(`Creating new user`);
+    const newUser = await db.insert(usersTable).values({ name, email }).returning();
+    return newUser[0];
+  }
+
+  static async update({ id, name, email }: { id: number; name: string; email: string; }) {
+    logger.info(`Updating userId: ${id}`);
+    const user = await db.select().from(usersTable).where(eq(usersTable.id, id)).execute();
+    if (!user.length) {
+      logger.error(`No user found for userId ${id}`);
+      throw new NotFoundError("User not found");
     }
+    const updatedUser = await db.update(usersTable).set({ name, email }).where(eq(usersTable.id, id)).returning();
+    return updatedUser[0];
   }
 
   static async deleteById(userId: number) {

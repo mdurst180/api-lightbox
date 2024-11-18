@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createOrUpdateUser, deleteUser, getUser, getUsers } from '../controllers/userController';
+import { createUser, updateUser, deleteUser, getUser, getUsers } from '../controllers/userController';
 import { validate } from '../middleware/validation';
 import { validateCreateUser, validateGetUser, validateUpdateUser } from '../validators/usersValidation';
 
@@ -7,12 +7,10 @@ const router = Router();
 
 router.get('/', getUsers);
 router.get('/:userId', getUser);
-router.put('/:userId', validate(validateUpdateUser), createOrUpdateUser);
-router.post('/', validate(validateCreateUser), createOrUpdateUser);
-
+router.put('/:userId', validate(validateUpdateUser), updateUser);
+router.post('/', validate(validateCreateUser), createUser);
 router.delete('/:userId', deleteUser);
 
-// Add other routes like GET /users/:id, PUT /users/:id, DELETE /users/:id
 /**
  * @swagger
  * components:
@@ -168,6 +166,31 @@ router.delete('/:userId', deleteUser);
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error. Unable to update the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *   delete:
+ *     summary: Delete a user by userId
+ *     description: Delete an existing user by their unique userId.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The ID of the user to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: User deleted successfully. No content is returned.
+ *       404:
+ *         description: User not found. The userId provided does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error. Unable to delete the user.
  *         content:
  *           application/json:
  *             schema:
