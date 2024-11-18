@@ -21,7 +21,6 @@ export class Post {
   }
 
   static async create({ title, content, user_id }: { title: string; content: string; user_id: number }) {
-    // First, check if the user exists
     const user = await db.select().from(usersTable).where(eq(usersTable.id, user_id)).execute();
     if (!user.length) {
       logger.error(`No user found for userId ${user_id}`);
@@ -34,14 +33,12 @@ export class Post {
   }
 
   static async update({ id, title, content, user_id }: { id: number; title: string; content: string; user_id: number }) {
-    // Check if the post exists
     const post = await db.select().from(postsTable).where(eq(postsTable.id, id)).execute();
     if (!post.length) {
       logger.error(`No post found for postId ${id}`);
       throw new NotFoundError("Post not found");
     }
 
-    // Check if the user exists
     const user = await db.select().from(usersTable).where(eq(usersTable.id, user_id)).execute();
     if (!user.length) {
       logger.error(`No user found for userId ${user_id}`);
@@ -54,7 +51,7 @@ export class Post {
   }
 
   static async deleteById(postId: number) {
-    logger.info(`Attempting to delete postId: ${postId}`);
+    logger.info(`Deleting postId: ${postId}`);
     const post = await db.select().from(postsTable).where(eq(postsTable.id, postId)).execute();
 
     if (!post.length) {

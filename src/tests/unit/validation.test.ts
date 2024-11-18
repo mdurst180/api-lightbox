@@ -33,10 +33,8 @@ describe('validate middleware', () => {
       email: 'john.doe@example.com',
     };
 
-    // Call the validate middleware
     validate(testSchema)(mockReq as Request, mockRes as Response, next);
 
-    // Ensure next() was called
     expect(next).toHaveBeenCalled();
   });
 
@@ -45,13 +43,9 @@ describe('validate middleware', () => {
     // Simulate an invalid request body (missing both name and email)
     mockReq.body = {};
 
-    // Call the validate middleware
     validate(testSchema)(mockReq as Request, mockRes as Response, next);
 
-    // Check that the response status was 400
     expect(mockRes.status).toHaveBeenCalledWith(400);
-
-    // Ensure next() was not called (because validation failed)
     expect(next).not.toHaveBeenCalled();
   });
 });

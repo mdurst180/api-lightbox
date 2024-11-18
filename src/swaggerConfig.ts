@@ -4,9 +4,9 @@ const swaggerOptions: SwaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'User and Post Management API',
+      title: 'User and Post API',
       version: '1.0.0',
-      description: 'A simple RESTful API for managing users and posts',
+      description: 'A RESTful API for managing users and posts',
     },
     servers: [
       {
@@ -14,7 +14,7 @@ const swaggerOptions: SwaggerOptions = {
       },
     ],
   },
-  apis: ['./src/routes/*.ts'], // Path to your route files for Swagger annotations
+  apis: ['./src/routes/*.ts'],
 };
 
 export default swaggerOptions;
