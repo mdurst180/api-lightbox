@@ -1,7 +1,7 @@
 import { db } from "../db";
 import logger from "../logger";
 import { NotFoundError } from "../middleware/notFoundError";
-import { usersTable } from "../schemas/schema";
+import { postsTable, usersTable } from "../schemas/schema";
 import { eq } from "drizzle-orm";
 
 
@@ -45,6 +45,10 @@ export class User {
       logger.error(`No user found for userId ${userId}`);
       throw new NotFoundError("User not found");
     }
+
+    // Delete all posts associated with the user
+    await db.delete(postsTable).where(eq(postsTable.user_id, userId)).execute();
+    logger.info(`All posts for userId: ${userId} deleted successfully`);
 
     await db.delete(usersTable).where(eq(usersTable.id, userId)).execute();
     logger.info(`User with userId: ${userId} deleted successfully`);
