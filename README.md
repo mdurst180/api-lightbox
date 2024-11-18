@@ -9,10 +9,11 @@ The application can run locally in a Docker container following the steps below.
 
 ## Setup
 
-### 1. Clone the Repo
+### 1. Install Locally
 ```bash
 git clone https://github.com/mdurst180/api-lightbox
 cd api-lightbox
+npm install
 ```
 ### 2. Run Tests
 The tests include integration and unit tests. The integration tests use PGLite as an in-memory postgres lite db.
