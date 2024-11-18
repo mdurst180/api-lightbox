@@ -28,7 +28,7 @@ app.use('/api', routes); // Register the routes under the /api path
 
 // Sample route for testing
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, Express with TypeScript!');
+  res.send('Lightbox API project');
 });
 
 app.use(errorHandler);

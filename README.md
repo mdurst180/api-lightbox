@@ -3,17 +3,7 @@
 
 ## Description
 
-This project is a RESTful CRUD API for managing users and posts. The API is built using **Express**, **Drizzle ORM** and **Swagger** for API documentation.
-
-## Components
-
-- **User Management**: 
-  - Create, retrieve, update, and delete users.
-  
-- **Post Management**:
-  - Create, retrieve, update, and delete posts.
-
-- **Database**: Uses **PostgreSQL** for data storage, with **Drizzle ORM** for database operations.
+This project is a RESTful CRUD API for managing users and posts. The API is built in Typescript running on **Express**. The database is Postgres and the application uses **Drizzle ORM** as its ORM. **Swagger** is used for documentation.
 
 ## Setup
 
@@ -22,7 +12,7 @@ This project is a RESTful CRUD API for managing users and posts. The API is buil
 git clone https://github.com/mdurst180/api-lightbox
 cd api-lightbox
 ```
-## Running Tests
+### 2. Run Tests
 The tests include integration and unit tests. The integration tests use PGLite as an in memory database to make better simulate the real application.
 
 To run the tests:
@@ -30,36 +20,52 @@ To run the tests:
 npm run test
 ```
 
-### 2. Run locally with Docker
+## Running Locally
 
-Ensure you have **Docker** installed. Then, follow these steps to set up your environment using Docker:
+With **Docker** installed, follow these steps to run locally:
 
-- **Build & Run in Docker**:
+### 1. Build & Run in Docker
 ```bash
 docker-compose up --build
 ```
 
-This will start both the application and the PostgreSQL database container. The application will be available on [http://localhost:3000](http://localhost:3000).
+This will start both the application and the Postgres database. The application will be available on [http://localhost:3000](http://localhost:3000).
 
-- **Swagger API Docs**:
-The Swagger doc can be accessed here.
+### 2. View the Swagger API Docs
+Once running, the Swagger docs can be accessed here.
 ```
 http://localhost:3000/api-docs
 ```
 
-- **Example curl commands**:
-Below are some curl commands to use the local instance.
+### 3. Run Curl Commands
+Below are some curl commands to use against the local instance.
 
 Get all users
 ```
 curl -X GET http://localhost:3000/api/users
 ```
-
-- **Stopping the Application**:
-```bash
-docker-compose down
+Create a new user
+```
+curl -X POST http://localhost:3000/api/users \
+-H "Content-Type: application/json" \
+-d '{"name": "John Doe", "email": "john.doe@example.com"}'
+```
+Get user by userId
+```
+curl -X GET http://localhost:3000/api/users/{{userId}}
 ```
 
+Update an existing user
+```
+curl -X PUT http://localhost:3000/api/users/{{userId}} \
+-H "Content-Type: application/json" \
+-d '{"name": "Jane Doe", "email": "jane.doe@example.com"}'
+```
+
+Delete a user
+```
+curl -X DELETE http://localhost:3000/api/users/{{userId}}
+```
 
 ## License
 
