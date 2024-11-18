@@ -1,45 +1,66 @@
-# api-ightbox
-Lightbox API users
 
-express
-swagger
-drizzle
-postgres
-docker
+# Lightbox API
 
-fly.io
-Step 1: Install the Fly.io CLI
-If you haven’t already, install the Fly.io CLI by following the installation instructions from the Fly.io documentation:
+## Description
 
-Install Fly.io CLI
-Step 2: Log in to Fly.io
-Log in to your Fly.io account using the following command:
+This project is a RESTful CRUD API for managing users and posts. The API is built using **Express**, **Drizzle ORM** and **Swagger** for API documentation.
 
-fly auth login
-Step 3: Create a New Fly.io App
-If you haven’t already created your Fly.io app, create a new one with the following command:
+## Components
 
-fly launch
-Choose a name for your app.
-Select your region (choose one closest to your users for performance reasons).
-Step 4: Create a Fly.io PostgreSQL Database
-Fly.io makes it easy to set up a PostgreSQL database with their managed database service. Run the following command to create the database:
+- **User Management**: 
+  - Create, retrieve, update, and delete users.
+  
+- **Post Management**:
+  - Create, retrieve, update, and delete posts.
 
-fly postgres create
-This will:
+- **Database**: Uses **PostgreSQL** for data storage, with **Drizzle ORM** for database operations.
 
-Provision a PostgreSQL instance on Fly.io.
-Output connection information (such as the database URL) that you can use to connect to the database from your app.
-You will see a connection string that looks like this:
+## Setup
 
-postgres://username:password@hostname:port/database_name
-Step 5: Set Up the Database Connection in Your App
-Add the Database URL as an Environment Variable: After creating the PostgreSQL database, Fly.io provides you with the connection string. You need to set it as an environment variable so your app can access the database securely.
-Run the following command to set the DATABASE_URL environment variable in your app:
+### 1. Clone the Repo
+```bash
+git clone https://github.com/mdurst180/api-lightbox
+cd api-lightbox
+```
+## Running Tests
+The tests include integration and unit tests. The integration tests use PGLite as an in memory database to make better simulate the real application.
 
-fly secrets set DATABASE_URL=postgres://username:password@hostname:port/database_name
-Replace postgres://username:password@hostname:port/database_name with the actual connection string you received from the fly postgres create command.
+To run the tests:
+```bash
+npm run test
+```
 
-fly deploy
+### 2. Run locally with Docker
 
- docker-compose up --build
+Ensure you have **Docker** installed. Then, follow these steps to set up your environment using Docker:
+
+- **Build & Run in Docker**:
+```bash
+docker-compose up --build
+```
+
+This will start both the application and the PostgreSQL database container. The application will be available on [http://localhost:3000](http://localhost:3000).
+
+- **Swagger API Docs**:
+The Swagger doc can be accessed here.
+```
+http://localhost:3000/api-docs
+```
+
+- **Example curl commands**:
+Below are some curl commands to use the local instance.
+
+Get all users
+```
+curl -X GET http://localhost:3000/api/users
+```
+
+- **Stopping the Application**:
+```bash
+docker-compose down
+```
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
