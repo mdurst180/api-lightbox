@@ -26,11 +26,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use('/api', routes); // Register the routes under the /api path
 
-app.use(errorHandler);
-
 // Sample route for testing
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, Express with TypeScript!');
 });
+
+app.use(errorHandler);
 
 export default app;

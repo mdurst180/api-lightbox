@@ -1,19 +1,44 @@
 import { Router } from 'express';
-import { createUser, getUser, getUsers } from '../controllers/userController';
+import { createOrUpdateUser, deleteUser, getUser, getUsers } from '../controllers/userController';
 import { validate } from '../middleware/validation';
-import { validateCreateUser, validateGetUser } from '../validators/usersValidation';
+import { validateCreateUser, validateGetUser, validateUpdateUser } from '../validators/usersValidation';
 
 const router = Router();
 
 router.get('/', getUsers);
-
 router.get('/:userId', getUser);
+router.put('/:userId', validate(validateUpdateUser), createOrUpdateUser);
+router.post('/', validate(validateCreateUser), createOrUpdateUser);
 
-router.post('/', validate(validateCreateUser), createUser);
+router.delete('/:userId', deleteUser);
 
 // Add other routes like GET /users/:id, PUT /users/:id, DELETE /users/:id
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *         message:
+ *           type: string
+ *     SuccessResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: User added successfully
  * /users:
  *   get:
  *     summary: Retrieve a list of users
@@ -26,14 +51,7 @@ router.post('/', validate(validateCreateUser), createUser);
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   email:
- *                     type: string
+ *                 $ref: '#/components/schemas/User'
  *   post:
  *     summary: Create a new user
  *     description: Create a new user by providing their name and email.
@@ -61,37 +79,19 @@ router.post('/', validate(validateCreateUser), createUser);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User added successfully
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
  *         description: Bad request. Validation error if name or email is missing/invalid.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: validation_error
- *                 message:
- *                   type: string
- *                   example: Name is required
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error. Unable to add the user.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: server_error
- *                 message:
- *                   type: string
- *                   example: Unable to add
+ *               $ref: '#/components/schemas/ErrorResponse'
  * /users/{userId}:
  *   get:
  *     summary: Retrieve a single user by userId
@@ -109,39 +109,69 @@ router.post('/', validate(validateCreateUser), createUser);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 name:
- *                   type: string
- *                 email:
- *                   type: string
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: User not found. The userId provided does not exist.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: not_found
- *                 message:
- *                   type: string
- *                   example: User not found
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Internal server error. Unable to retrieve the user.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: server_error
- *                 message:
- *                   type: string
- *                   example: Error fetching user
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *   put:
+ *     summary: Update an existing user by userId
+ *     description: Update the details of an existing user by their unique userId.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the user.
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: The email of the user.
+ *                 example: john.doe@example.com
+ *     responses:
+ *       200:
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Bad request. Validation error if name or email is missing/invalid.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: User not found. The userId provided does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error. Unable to update the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
+
 export default router;

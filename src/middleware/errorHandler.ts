@@ -8,7 +8,8 @@ export interface ErrorResponse {
   message: string;
 }
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
+  logger.info("TESTING error");
   logger.error("Unhandled error", err);
 
   if (err.status) {
