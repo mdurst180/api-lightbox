@@ -1,33 +1,20 @@
 // Mock the db module
-jest.mock('../../db', () => {
-  const { drizzle } = require('drizzle-orm/pglite');
-  const { PGlite } = require('@electric-sql/pglite');
-
-  const client = new PGlite();
-  return {
-    db: drizzle(client), // Directly return the mocked db
-    client
-  };
-});
-
+import './mockDb';
 import request from 'supertest';
-import app from '../../app';  // Import the Express app
+import app from '../../app';
 import { migrate } from 'drizzle-orm/pglite/migrator';
 import { db, client } from '../../db';
 import logger from '../../logger';
 
-// Setup schema before tests
 beforeAll(async () => {
   await migrate(db, { migrationsFolder: './migrations/' });
 });
 
-// Clean up after each test by deleting user rows
 afterEach(async () => {
   await client.query('DELETE FROM users'); // Replace 'users' with your actual table name
 });
 
 afterAll(async () => {
-  // Close the Drizzle connection
   await client.close()
 });
 
